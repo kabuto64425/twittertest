@@ -9,7 +9,7 @@ $request_method = 'POST' ;
 
 // パラメータA (リクエストのオプション)
 $params_a = array(
-    'status' => 'APITEST'
+    'status' => 'APIを通して投稿してみました。' . "\n\n" . '投稿時間: ' . date( 'Y/m/d H:i' ) . "\n" . '投稿元: https://syncer.jp/Web/API/Twitter/Rest_API/' ,
 //	'media_ids' => "" ,	// 添付する画像のメディアID
 ) ;
 
@@ -83,6 +83,7 @@ if ( $params_a ) {
 $curl = curl_init() ;
 curl_setopt( $curl, CURLOPT_URL , $request_url ) ;	// リクエストURL
 curl_setopt( $curl, CURLOPT_HEADER, true ) ;	// ヘッダーを取得
+curl_setopt( $curl, CURLINFO_HEADER_OUT, true ) ;
 curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, $context['http']['method'] ) ;	// メソッド
 curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false ) ;	// 証明書の検証を行わない
 curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true ) ;	// curl_execの結果を文字列で返す
@@ -92,14 +93,16 @@ if( isset( $context['http']['content'] ) && !empty( $context['http']['content'] 
 }
 curl_setopt( $curl, CURLOPT_TIMEOUT, 5 ) ;	// タイムアウトの秒数
 $res1 = curl_exec( $curl ) ;
-$res2 = curl_getinfo( $curl ) ;
+$res2 = curl_getinfo( $curl, CURLINFO_HEADER_OUT ) ;
 curl_close( $curl ) ;
 
-//echo 'requesturl:' . $request_url . '<br>';
-//echo 'method:' . $context['http']['method'] . '<br>';
-//echo 'header:' . $context['http']['header'][0] . '<br>';
-//echo 'header-size:' . count($context['http']['header']) . '<br>';
-//echo 'content:' . $context['http']['content'] . '<br>';
+echo $res2;
+
+/*echo 'requesturl:' . $request_url . '<br>';
+echo 'method:' . $context['http']['method'] . '<br>';
+echo 'header:' . $context['http']['header'][0] . '<br>';
+echo 'header-size:' . count($context['http']['header']) . '<br>';
+echo 'content:' . $context['http']['content'] . '<br>';*/
 
 
 ?>
